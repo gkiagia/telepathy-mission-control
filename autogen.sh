@@ -1,6 +1,13 @@
 #!/bin/sh
 set -e
 
+test -n "$srcdir" || srcdir=$(dirname "$0")
+test -n "$srcdir" || srcdir=.
+
+olddir=$(pwd)
+
+cd $srcdir
+
 echo 'Running gtkdocize'
 gtkdocize
 
@@ -36,9 +43,11 @@ else
     run_configure=false
 fi
 
+cd $olddir
+
 default_args="--enable-gtk-doc --enable-mcd-plugins --enable-gnome-keyring=auto"
 
 if test $run_configure = true; then
     echo "Running ./configure $default_args $*"
-    ./configure $default_args "$@"
+    $srcdir/configure $default_args "$@"
 fi
